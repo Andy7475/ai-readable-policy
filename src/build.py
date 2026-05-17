@@ -30,7 +30,7 @@ def main() -> None:
         out_path.write_text(html, encoding="utf-8")
         print(f"  Wrote {out_path.relative_to(REPO_ROOT)}")
 
-        all_policies.append({"metadata": metadata, "sections": sections})
+        all_policies.append({"metadata": metadata, "sections": sections, "file_stem": md_path.stem})
 
     build_index(all_policies, DIST_DIR / "search-index.json")
 

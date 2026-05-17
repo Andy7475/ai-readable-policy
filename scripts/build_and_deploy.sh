@@ -17,7 +17,8 @@ uv run --with markdown --with jinja2 --with pyyaml --with python-slugify --with 
 
 echo ""
 echo "==> Deploying to ${BUCKET}/${PREFIX}/..."
-gcloud storage cp --recursive "${DIST}/" "${BUCKET}/${PREFIX}/" \
+# rsync syncs directory contents without creating a dist/ subfolder in the bucket
+gcloud storage rsync --recursive "${DIST}" "${BUCKET}/${PREFIX}" \
   --project="${PROJECT}"
 
 echo ""

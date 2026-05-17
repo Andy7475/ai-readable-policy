@@ -30,7 +30,7 @@ def build(all_policies: list[dict], output_path: Path) -> None:
 
     for entry in all_policies:
         meta = entry["metadata"]
-        policy_file = f"policies/{meta['id'].replace('_', '-')}.html"
+        policy_file = f"policies/{entry['file_stem']}.html"
 
         policies_meta.append({
             "id": meta["id"],
@@ -49,6 +49,7 @@ def build(all_policies: list[dict], output_path: Path) -> None:
                 "policy_title": meta["title"],
                 "section_title": section["title"],
                 "text": section["plain_text"],
+                "content_html": section["content_html"],
                 "terms": _tokenise(section["plain_text"]),
             })
 

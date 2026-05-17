@@ -219,9 +219,15 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   border-left: 3px solid var(--border);
   padding-left: .75rem;
   color: var(--text);
-  white-space: pre-wrap;
   word-break: break-word;
 }
+
+.verbatim-text p { margin-bottom: .5rem; }
+.verbatim-text p:last-child { margin-bottom: 0; }
+.verbatim-text ul, .verbatim-text ol { padding-left: 1.25rem; margin-bottom: .5rem; }
+.verbatim-text li { margin-bottom: .2rem; }
+.verbatim-text strong { font-weight: 600; }
+.verbatim-text h3 { font-size: .95rem; font-weight: 600; margin: .75rem 0 .35rem; }
 
 /* ── Policy index list ─────────────────────────────────────────────────────── */
 #policy-list {
