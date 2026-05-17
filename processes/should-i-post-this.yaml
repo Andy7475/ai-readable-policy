@@ -1,0 +1,237 @@
+id: should-i-post-this
+title: "Should I post this?"
+description: >
+  A decision guide for LinkedIn posts involving achievements, life events,
+  congratulations to colleagues who overtook you, and signals that you
+  are available for work. Follow each step before hitting publish.
+policy_refs:
+  - policies/content-standards.html#li-content--crowbarring-strategic-insights-into-life-events
+  - policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol
+  - policies/content-standards.html#li-content--open-employment-signalling-standards
+
+start: post_type
+
+nodes:
+  post_type:
+    question: "What type of post is this?"
+    options:
+      achievement:
+        label: "My own achievement or certificate"
+        next: is_specific
+      life_event:
+        label: "A personal life event with a lesson"
+        next: genuine_lesson
+      congrats:
+        label: "Congratulating someone who beat me to a promotion"
+        next: time_elapsed
+      job_seeking:
+        label: "Signalling I am available — or 'engaging' with a tech giant"
+        next: desperation_check
+
+  is_specific:
+    question: "Is the achievement specific and verifiable — not just 'growth' or 'I learned so much'?"
+    policy_ref: "policies/achievement-inflation.html#li-achieve--the-vagueness-principle"
+    options:
+      yes:
+        label: "Yes — I can name a number or outcome"
+        next: check_humbled
+      no:
+        label: "No — it is more of a feeling"
+        next: too_vague
+
+  check_humbled:
+    question: "Does your draft use the word 'humbled', or more than two emojis?"
+    policy_ref: "policies/content-standards.html#li-content--prohibited-phrases-and-cliches"
+    options:
+      yes:
+        label: "Yes to either of those"
+        next: fix_language
+      no:
+        label: "No — clean draft"
+        next: approved_post
+
+  fix_language:
+    type: action
+    text: >
+      Replace 'humbled' with what you actually feel — excited, proud,
+      relieved, grateful. Reduce emojis to a maximum of two. A 45-minute
+      certificate does not require a parade. A promotion announcement does
+      not need five celebration emojis. One will do.
+    policy_ref: "policies/content-standards.html#li-content--emoji-governance-framework"
+    next: approved_post
+
+  genuine_lesson:
+    question: "Did you think about this professional lesson at the time of the event — or did you add it when writing the post?"
+    policy_ref: "policies/content-standards.html#li-content--crowbarring-strategic-insights-into-life-events"
+    options:
+      at_the_time:
+        label: "I thought it during the event"
+        next: is_surprising
+      retrospective:
+        label: "I added it when writing the post"
+        next: crowbarring_blocked
+
+  is_surprising:
+    question: "Is the lesson genuinely specific — or is it 'adversity teaches persistence' with a new costume?"
+    options:
+      surprising:
+        label: "Specific and non-obvious"
+        next: approved_post
+      generic:
+        label: "Pretty universal, honestly"
+        next: remove_lesson
+
+  time_elapsed:
+    question: "How long since the promotion was announced?"
+    policy_ref: "policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol"
+    options:
+      under_72h:
+        label: "Under 72 hours"
+        next: wait_advised
+      over_72h:
+        label: "72 hours or more"
+        next: phrasing_check
+
+  phrasing_check:
+    question: "Does your congratulations message prominently feature yourself — your tenure, your feelings, your shared history?"
+    policy_ref: "policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol"
+    options:
+      yes:
+        label: "There is quite a lot of me in it"
+        next: edit_yourself_out
+      no:
+        label: "It is genuinely about them"
+        next: emoji_check
+
+  emoji_check:
+    question: "How many emojis are you using in your congratulations message?"
+    policy_ref: "policies/content-standards.html#li-content--emoji-governance-framework"
+    options:
+      zero_or_one:
+        label: "Zero or one"
+        next: approved_post
+      several:
+        label: "Several — I want to seem enthusiastic"
+        next: reduce_emojis
+
+  desperation_check:
+    question: "How many open-employment signals or job-seeking posts have you made in the past 7 days?"
+    policy_ref: "policies/content-standards.html#li-content--open-employment-signalling-standards"
+    options:
+      none:
+        label: "None — this is my first"
+        next: hyperscaler_check
+      some:
+        label: "Two or three"
+        next: frequency_warning
+      many:
+        label: "Several — I comment on every relevant post"
+        next: desperation_blocked
+
+  hyperscaler_check:
+    question: "Is this a comment on an AWS, Google, Microsoft, or Meta post implying they would benefit from hiring you?"
+    policy_ref: "policies/content-standards.html#li-content--open-employment-signalling-standards"
+    options:
+      yes:
+        label: "Yes — I plan to tell them what they are missing"
+        next: hyperscaler_blocked
+      no:
+        label: "No — it is a straightforward capability signal"
+        next: approved_post
+
+  edit_yourself_out:
+    type: action
+    text: >
+      Remove all references to yourself — your tenure, your shared history,
+      your feelings about their trajectory. Rewrite so that the subject of
+      every sentence is the person being congratulated. Read it back. If you
+      appear more than once, edit again.
+    policy_ref: "policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol"
+    next: emoji_check
+
+  reduce_emojis:
+    type: action
+    text: >
+      Reduce to one emoji maximum in a congratulations context. The 🙌 is
+      under review but currently permitted. Multiple emojis in a
+      congratulations post suggest enthusiasm that may be read as
+      performed enthusiasm, which will also be read.
+    policy_ref: "policies/content-standards.html#li-content--emoji-governance-framework"
+    next: approved_post
+
+  frequency_warning:
+    type: action
+    text: >
+      You have recently signalled availability. A further post within the
+      same week creates an impression of urgency rather than strategic
+      positioning. Consider waiting five working days before your next
+      signal. Use the time to post something that demonstrates capability.
+    policy_ref: "policies/content-standards.html#li-content--open-employment-signalling-standards"
+    next: approved_post
+
+  approved_post:
+    type: terminal
+    outcome: approved
+    text: >
+      Your post meets content standards. You may publish. Try not to
+      refresh notifications for at least 20 minutes. You will fail at
+      this, but try.
+
+  too_vague:
+    type: terminal
+    outcome: blocked
+    text: >
+      'I learned so much' is not an achievement — it is an emotion dressed
+      as a sentence. Either make it specific, or apply an approved inflation
+      multiplier from the Achievement Inflation Policy, or do not post it.
+    policy_ref: "policies/achievement-inflation.html#li-achieve--approved-inflation-multipliers"
+
+  crowbarring_blocked:
+    type: terminal
+    outcome: blocked
+    text: >
+      Retrospective lessons appended to personal events are crowbarring.
+      Remove the lesson. If the event is worth sharing, share it plainly.
+      If it only works with the lesson attached, it was not worth sharing.
+    policy_ref: "policies/content-standards.html#li-content--crowbarring-strategic-insights-into-life-events"
+
+  remove_lesson:
+    type: terminal
+    outcome: approved
+    text: >
+      A generic lesson weakens the post. Remove it and share the event
+      plainly — personal content without a forced professional angle is
+      increasingly rare and therefore noteworthy. Post it as a thing that
+      happened.
+
+  wait_advised:
+    type: terminal
+    outcome: blocked
+    text: >
+      Congratulating within 72 hours signals you were watching. Wait.
+      Use the time to draft something that is genuinely about them and
+      not about how professionally magnanimous you are.
+    policy_ref: "policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol"
+
+  desperation_blocked:
+    type: terminal
+    outcome: blocked
+    text: >
+      Frequency of job-seeking signals above a certain threshold does not
+      increase your attractiveness as a candidate — it signals the opposite.
+      Step back for at least two weeks. Post something that demonstrates
+      what you can do rather than the fact that you are currently doing
+      nothing.
+    policy_ref: "policies/content-standards.html#li-content--open-employment-signalling-standards"
+
+  hyperscaler_blocked:
+    type: terminal
+    outcome: blocked
+    text: >
+      Informing Google that their cloud strategy would improve if they hired
+      you has never resulted in Google hiring anyone. It is a comment, not
+      a cover letter. Your observation that their Q3 earnings call missed
+      an opportunity in edge computing will not reach their talent team.
+      If you want to work there, apply. If you do not want to apply,
+      stop commenting.
+    policy_ref: "policies/content-standards.html#li-content--open-employment-signalling-standards"

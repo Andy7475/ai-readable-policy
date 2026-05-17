@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Policy Q&amp;A — AI-Readable Policy Demo</title>
+  <title>LinkedIn Compliance Hub — Policy Q&amp;A</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <h1>Policy Q&amp;A</h1>
-    <p class="subtitle">Ask a question about company policy. The answer cites the exact policy sections — verbatim, no paraphrasing.</p>
+    <h1>LinkedIn Compliance Hub</h1>
+    <p class="subtitle">Official policy guidance for posting, achievement reporting, and AI use on LinkedIn. The answer cites the exact policy sections — verbatim, no paraphrasing. This website has been written in accordance with these polices...I think</p>
   </header>
 
   <main>
@@ -32,7 +32,7 @@
       <p class="hint" id="index-info">Loading policy index…</p>
       <div class="field-col">
         <textarea id="query-input" rows="3"
-          placeholder="e.g. What are the requirements for handling confidential data sent by email?"
+          placeholder="e.g. Can I rewrite my post with AI? How many emojis can I use on a certificate post?"
           spellcheck="true"></textarea>
         <div class="query-actions">
           <button id="search-btn" class="primary">Ask</button>
@@ -53,11 +53,20 @@
     <section class="card" id="policies-section">
       <h2>Policies in this index</h2>
       <ul id="policy-list">
-        <li><a href="policies/information-security.html">Information Security Policy</a></li>
-        <li><a href="policies/data-classification.html">Data Classification Policy</a></li>
-        <li><a href="policies/acceptable-use.html">Acceptable Use Policy</a></li>
+        <li><a href="policies/ai-concealment.html">LinkedIn AI Use Concealment Policy</a></li>
+        <li><a href="policies/achievement-inflation.html">Professional Achievement Inflation Policy</a></li>
+        <li><a href="policies/content-standards.html">LinkedIn Content Standards Policy</a></li>
       </ul>
       <p class="hint">Each policy uses semantic HTML with addressable sections — every link above navigates directly to the source document.</p>
+    </section>
+
+    <section class="card" id="processes-section">
+      <h2>Process guides <span class="badge-new">policies-as-code</span></h2>
+      <p class="hint">Step-by-step decision guides derived from policy. Each step links back to the exact policy section that governs it. Use the optional AI suggestion to navigate based on your situation.</p>
+      <ul id="process-list">
+        <li><a href="processes/should-i-rewrite-with-ai.html">Should I rewrite this with AI?</a></li>
+        <li><a href="processes/should-i-post-this.html">Should I post this?</a></li>
+      </ul>
     </section>
 
   </main>

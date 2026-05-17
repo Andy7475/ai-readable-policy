@@ -1,0 +1,122 @@
+id: should-i-rewrite-with-ai
+title: "Should I rewrite this with AI?"
+description: >
+  A decision guide for anyone hovering over the 'Rewrite with AI' button.
+  Follow the steps before pressing it. It will not take long.
+policy_refs:
+  - policies/ai-concealment.html#li-ai--plausible-deniability-framework
+  - policies/ai-concealment.html#li-ai--approved-concealment-techniques
+
+start: have_opinion
+
+nodes:
+  have_opinion:
+    question: "Does your draft contain an actual opinion — something a real person could disagree with?"
+    policy_ref: "policies/content-standards.html#li-content--the-humble-brag-framework"
+    options:
+      yes:
+        label: "Yes — I have a position"
+        next: sounds_like_you
+      no:
+        label: "No, it is more of a vibe"
+        next: ai_cannot_help
+
+  sounds_like_you:
+    question: "Does your draft currently sound like you — or like a slightly worse version of you?"
+    options:
+      yes:
+        label: "It sounds like me"
+        next: grammar_only
+      no:
+        label: "It sounds like I had a concussion"
+        next: substantial_rewrite
+
+  grammar_only:
+    question: "Do you need help with grammar and flow only — not the actual content?"
+    policy_ref: "policies/ai-concealment.html#li-ai--approved-concealment-techniques"
+    options:
+      yes:
+        label: "Yes — just tidy it up"
+        next: light_touch_approved
+      no:
+        label: "No — I want it to sound smarter"
+        next: ceo_voice_risk
+
+  ceo_voice_risk:
+    question: "Are you comfortable sounding like every startup CEO on LinkedIn — declarative, visionary, and faintly exhausting?"
+    policy_ref: "policies/content-standards.html#li-content--prohibited-phrases-and-cliches"
+    options:
+      yes:
+        label: "Honestly yes — they seem successful"
+        next: apply_veneer
+      no:
+        label: "No — I want to sound like myself"
+        next: rewrite_yourself
+
+  substantial_rewrite:
+    question: "If AI substantially rewrites this, will your original point survive — or be replaced by confident-sounding nothing?"
+    policy_ref: "policies/ai-concealment.html#li-ai--the-authenticity-veneer"
+    options:
+      survives:
+        label: "My point will survive"
+        next: apply_veneer
+      replaced:
+        label: "Probably replaced by confident nothing"
+        next: start_over
+
+  apply_veneer:
+    type: action
+    text: >
+      Before posting: add one specific personal detail the AI could not have
+      known (a name, a place, a minor inconvenience from last week). Consider
+      introducing one hedged sentence — 'I'm not sure I've fully figured this
+      out, but...' — and mean it. Apply the Strategic Typo if concerned about
+      detection. Then disclose AI assistance in the post body.
+    policy_ref: "policies/ai-concealment.html#li-ai--the-authenticity-veneer"
+    next: disclose_and_proceed
+
+  light_touch_approved:
+    type: terminal
+    outcome: approved
+    text: >
+      Light AI assistance for grammar and flow is fine. Your opinion remains
+      yours. Apply the Strategic Typo if you are feeling cautious about
+      detection. Post it.
+    policy_ref: "policies/ai-concealment.html#li-ai--approved-concealment-techniques"
+
+  disclose_and_proceed:
+    type: terminal
+    outcome: approved
+    text: >
+      Approved to proceed. Include a disclosure in the post body — something
+      like '(AI-assisted)' or '(drafted with AI help)'. Do not describe
+      the writing process itself as a personal growth experience.
+    policy_ref: "policies/ai-concealment.html#li-ai--plausible-deniability-framework"
+
+  ai_cannot_help:
+    type: terminal
+    outcome: blocked
+    text: >
+      AI cannot give you an opinion. It will generate text that sounds
+      confident but stands for nothing — which may already describe your
+      feed. Write what you actually think, even if it is shorter and less
+      polished. Especially if it is shorter and less polished.
+    policy_ref: "policies/content-standards.html#li-content--the-humble-brag-framework"
+
+  rewrite_yourself:
+    type: terminal
+    outcome: blocked
+    text: >
+      If AI would make you sound like someone else, that someone else is not
+      worth impersonating. Rewrite it yourself. Your connections followed you,
+      not a language model's approximation of a thought leader.
+    policy_ref: "policies/ai-concealment.html#li-ai--risk-management"
+
+  start_over:
+    type: terminal
+    outcome: blocked
+    text: >
+      If AI would replace your point with confident-sounding nothing, your
+      point was not ready to be a post. Step back. What do you actually want
+      to say? Start there — in one sentence. Build from that.
+    policy_ref: "policies/ai-concealment.html#li-ai--plausible-deniability-framework"

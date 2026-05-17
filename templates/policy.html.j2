@@ -58,6 +58,7 @@
     <section id="{{ section.id }}" aria-labelledby="{{ section.id }}-heading">
       <h2 id="{{ section.id }}-heading">{{ section.title }}</h2>
       {{ section.content_html | safe }}
+      <a href="#{{ policy.id }}--header" class="back-to-toc">&#8593; Back to contents</a>
     </section>
     {% endfor %}
 

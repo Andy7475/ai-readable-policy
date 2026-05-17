@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ process.title }} — Process Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <nav class="back-nav">
+    <a href="../index.html">&#8592; Policy Search</a>
+  </nav>
+
+  <div class="process-page">
+
+    <header class="process-header">
+      <span class="process-badge">Process Guide</span>
+      <h1>{{ process.title }}</h1>
+      <p class="subtitle">{{ process.description }}</p>
+      <div class="process-view-toggle">
+        <button id="btn-diagram" class="primary active-view" onclick="showView('diagram')">Flowchart</button>
+        <button id="btn-guided" onclick="showView('guided')">Step-by-step guide</button>
+      </div>
+    </header>
+
+    {# ── Diagram view ─────────────────────────────────────────────────── #}
+    <section id="view-diagram" class="card">
+      <pre class="mermaid">{{ mermaid }}</pre>
+    </section>
+
+    {# ── Guided view ──────────────────────────────────────────────────── #}
+    <section id="view-guided" class="card" hidden>
+
+      <div id="guided-situation" class="situation-box">
+        <label for="situation-input"><strong>Describe your situation</strong> (optional — used to get an AI suggestion at each step)</label>
+        <textarea id="situation-input" rows="2"
+          placeholder="e.g. I'm sending last quarter's financial forecasts to our external auditor…"></textarea>
+      </div>
+
+      <div id="guided-api-key" class="api-key-inline">
+        <label for="process-api-key">Google AI Studio API key (for AI suggestions)</label>
+        <input type="password" id="process-api-key" placeholder="AIza…" autocomplete="off">
+      </div>
+
+      <div id="guided-progress" class="breadcrumb" aria-label="Progress"></div>
+
+      <div id="guided-step"></div>
+
+      <div id="guided-result" hidden></div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // ── Data passed from build ───────────────────────────────────────────────
+    const NODES = {{ nodes_json | safe }};
+    const CHUNK_MAP = {{ chunk_map_json | safe }};
+    const START_NODE = {{ process.start | tojson }};
+    const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    const LS_KEY = 'policy-demo-api-key';
+    // Process pages live at processes/{id}.html; policies are at policies/{name}.html.
+    // Using new URL() resolves unambiguously regardless of DOM state.
+    const SITE_ROOT = new URL('../', window.location.href).href;
+
+    // ── View toggle ──────────────────────────────────────────────────────────
+    function showView(view) {
+      document.getElementById('view-diagram').hidden = (view !== 'diagram');
+      document.getElementById('view-guided').hidden = (view !== 'guided');
+      document.getElementById('btn-diagram').classList.toggle('active-view', view === 'diagram');
+      document.getElementById('btn-guided').classList.toggle('active-view', view === 'guided');
+      if (view === 'guided' && !state.started) startGuide();
+    }
+
+    // ── Guided state ─────────────────────────────────────────────────────────
+    const state = {
+      current: START_NODE,
+      history: [],
+      started: false,
+    };
+
+    function startGuide() {
+      state.started = true;
+      const savedKey = localStorage.getItem(LS_KEY);
+      if (savedKey) document.getElementById('process-api-key').value = savedKey;
+      document.getElementById('process-api-key').addEventListener('change', e => {
+        if (e.target.value.trim()) localStorage.setItem(LS_KEY, e.target.value.trim());
+      });
+      renderStep(START_NODE);
+    }
+
+    function renderStep(nodeId) {
+      state.current = nodeId;
+      const node = NODES[nodeId];
+      const stepEl = document.getElementById('guided-step');
+      const resultEl = document.getElementById('guided-result');
+      resultEl.hidden = true;
+      stepEl.innerHTML = '';
+
+      // breadcrumb
+      updateProgress();
+
+      // terminal node
+      if (node.type === 'terminal') {
+        renderTerminal(node);
+        return;
+      }
+
+      // action node (informational, then auto-advance)
+      if (node.type === 'action') {
+        renderAction(node);
+        return;
+      }
+
+      // question node
+      renderQuestion(nodeId, node);
+    }
+
+    function renderQuestion(nodeId, node) {
+      const stepEl = document.getElementById('guided-step');
+
+      const qEl = document.createElement('div');
+      qEl.className = 'step-question';
+
+      const qText = document.createElement('p');
+      qText.className = 'question-text';
+      qText.textContent = node.question;
+      qEl.appendChild(qText);
+
+      // Policy reference snippet
+      if (node.policy_ref) {
+        const snippet = getPolicySnippet(node.policy_ref);
+        if (snippet) {
+          const ref = document.createElement('div');
+          ref.className = 'step-policy-ref';
+          const refLink = document.createElement('a');
+          refLink.href = SITE_ROOT + node.policy_ref;
+          refLink.target = '_blank';
+          refLink.rel = 'noopener noreferrer';
+          refLink.textContent = snippet.policy_title + ' › ' + snippet.section_title + ' ↗';
+          refLink.className = 'policy-ref-link';
+          const refText = document.createElement('blockquote');
+          refText.className = 'verbatim-text';
+          refText.innerHTML = snippet.content_html;
+          ref.appendChild(refLink);
+          ref.appendChild(refText);
+          qEl.appendChild(ref);
+        }
+      }
+
+      // AI suggestion
+      const suggestRow = document.createElement('div');
+      suggestRow.className = 'suggest-row';
+      const suggestBtn = document.createElement('button');
+      suggestBtn.textContent = 'Get AI suggestion';
+      suggestBtn.className = 'suggest-btn';
+      const suggestResult = document.createElement('span');
+      suggestResult.className = 'suggest-result';
+      suggestBtn.onclick = async () => {
+        suggestBtn.disabled = true;
+        suggestBtn.textContent = 'Thinking…';
+        try {
+          const rec = await getAiSuggestion(node, Object.keys(node.options || {}));
+          if (rec) {
+            const optLabel = node.options[rec.recommended_option]?.label || rec.recommended_option;
+            suggestResult.textContent = `Suggestion: "${optLabel}" — ${rec.reason}`;
+          }
+        } catch (e) {
+          suggestResult.textContent = 'Could not get suggestion: ' + e.message;
+        } finally {
+          suggestBtn.disabled = false;
+          suggestBtn.textContent = 'Get AI suggestion';
+        }
+      };
+      suggestRow.appendChild(suggestBtn);
+      suggestRow.appendChild(suggestResult);
+      qEl.appendChild(suggestRow);
+
+      // Option buttons
+      const optionsEl = document.createElement('div');
+      optionsEl.className = 'step-options';
+      for (const [optId, opt] of Object.entries(node.options || {})) {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.label;
+        btn.onclick = () => {
+          state.history.push({ nodeId, label: node.question.substring(0, 40), choiceLabel: opt.label });
+          renderStep(opt.next);
+        };
+        optionsEl.appendChild(btn);
+      }
+      qEl.appendChild(optionsEl);
+
+      stepEl.appendChild(qEl);
+    }
+
+    function renderAction(node) {
+      const stepEl = document.getElementById('guided-step');
+
+      const box = document.createElement('div');
+      box.className = 'step-action';
+
+      const text = document.createElement('p');
+      text.textContent = node.text;
+      box.appendChild(text);
+
+      if (node.policy_ref) {
+        const link = document.createElement('a');
+        link.href = SITE_ROOT + node.policy_ref;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'View policy section ↗';
+        link.className = 'policy-ref-link';
+        box.appendChild(link);
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'primary';
+      btn.textContent = 'Continue →';
+      btn.onclick = () => {
+        state.history.push({ nodeId: state.current, label: 'Action', choiceLabel: 'Acknowledged' });
+        renderStep(node.next);
+      };
+      box.appendChild(btn);
+      stepEl.appendChild(box);
+    }
+
+    function renderTerminal(node) {
+      const resultEl = document.getElementById('guided-result');
+      const stepEl = document.getElementById('guided-step');
+      stepEl.innerHTML = '';
+
+      resultEl.className = 'terminal-result terminal-' + (node.outcome || 'info');
+      resultEl.innerHTML = '';
+
+      const icon = document.createElement('span');
+      icon.className = 'terminal-icon';
+      icon.textContent = node.outcome === 'approved' ? '✓' : '✕';
+
+      const heading = document.createElement('strong');
+      heading.textContent = node.outcome === 'approved' ? 'Approved to proceed' : 'Action required before proceeding';
+
+      const text = document.createElement('p');
+      text.textContent = node.text;
+
+      resultEl.appendChild(icon);
+      resultEl.appendChild(heading);
+      resultEl.appendChild(text);
+
+      if (node.policy_ref) {
+        const link = document.createElement('a');
+        link.href = SITE_ROOT + node.policy_ref;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'View relevant policy section ↗';
+        resultEl.appendChild(link);
+      }
+
+      const restartBtn = document.createElement('button');
+      restartBtn.textContent = 'Start again';
+      restartBtn.onclick = () => {
+        state.history = [];
+        state.current = START_NODE;
+        document.getElementById('guided-progress').innerHTML = '';
+        document.getElementById('guided-result').hidden = true;
+        renderStep(START_NODE);
+      };
+      resultEl.appendChild(restartBtn);
+      resultEl.hidden = false;
+    }
+
+    function updateProgress() {
+      const el = document.getElementById('guided-progress');
+      if (state.history.length === 0) { el.innerHTML = ''; return; }
+      el.innerHTML = state.history.map(h =>
+        `<span class="crumb">${escHtml(h.label)} <em>${escHtml(h.choiceLabel)}</em></span>`
+      ).join(' › ');
+    }
+
+    function getPolicySnippet(policyRef) {
+      // policyRef format: "policies/file.html#section-id"
+      const hash = policyRef.indexOf('#');
+      if (hash === -1) return null;
+      const sectionId = policyRef.slice(hash + 1);
+      return CHUNK_MAP[sectionId] || null;
+    }
+
+    async function getAiSuggestion(node, optionIds) {
+      const apiKey = document.getElementById('process-api-key').value.trim();
+      if (!apiKey) throw new Error('No API key set.');
+      const situation = document.getElementById('situation-input').value.trim();
+
+      const systemInstruction = [
+        'You are a compliance officer for the LinkedIn Thought Leadership Compliance Team — a satirical body that enforces absurdly earnest rules about LinkedIn posting behaviour.',
+        'Your job is to guide users through policy decision trees with deadpan authority.',
+        'Match the tone of the policy documents: dry, sardonic, matter-of-fact, and faintly judgemental.',
+        'Treat the policies seriously even though they are satirical.',
+        'Keep the reason field to 1-2 short sentences. Do not be encouraging. Do not use emojis. Do not say "Great choice!"',
+      ].join(' ');
+
+      const prompt = [
+        'Given the user\'s situation and the current policy question, recommend which option they should choose.',
+        'Reply with JSON only: { "recommended_option": "<one of the option IDs>", "reason": "<1-2 sentences in the dry compliance-officer tone>" }',
+        `Valid option IDs: ${optionIds.join(', ')}`,
+        '',
+        `Question: ${node.question}`,
+        situation ? `User situation: ${situation}` : '(No situation provided — apply general policy judgement.)',
+      ].join('\n');
+
+      const body = {
+        system_instruction: { parts: [{ text: systemInstruction }] },
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: 'application/json' },
+      };
+
+      const resp = await fetch(`${GEMINI_URL}?key=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!resp.ok) throw new Error(`API error ${resp.status}`);
+      const data = await resp.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error('Empty response from Gemini.');
+      return JSON.parse(text);
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#e7f1ff',
+        primaryBorderColor: '#0d6efd',
+        fontSize: '13px',
+      },
+      flowchart: { wrappingWidth: 260 },
+    });
+  </script>
+</body>
+</html>
