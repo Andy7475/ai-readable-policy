@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ policy.title }}</title>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": {{ policy.title | tojson }},
+    "version": {{ policy.version | tojson }},
+    "dateModified": {{ policy.date | tojson }},
+    "author": { "@type": "Organization", "name": {{ policy.owner | tojson }} },
+    "identifier": {{ policy.id | tojson }}
+  }
+  </script>
+
+  <meta name="policy-id"      content="{{ policy.id }}">
+  <meta name="policy-version" content="{{ policy.version }}">
+  <meta name="policy-date"    content="{{ policy.date }}">
+  <meta name="policy-owner"   content="{{ policy.owner }}">
+
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <nav class="back-nav">
+    <a href="../index.html">&#8592; Policy Search</a>
+  </nav>
+
+  <article itemscope itemtype="https://schema.org/TechArticle">
+
+    <header id="{{ policy.id }}--header">
+      <h1 itemprop="name">{{ policy.title }}</h1>
+      <dl class="policy-meta">
+        <dt>Version</dt>
+        <dd itemprop="version">{{ policy.version }}</dd>
+        <dt>Effective Date</dt>
+        <dd itemprop="dateModified">{{ policy.date }}</dd>
+        <dt>Policy Owner</dt>
+        <dd itemprop="author">{{ policy.owner }}</dd>
+        <dt>Policy ID</dt>
+        <dd>{{ policy.id }}</dd>
+      </dl>
+    </header>
+
+    <nav class="toc" aria-label="Contents">
+      <h2>Contents</h2>
+      <ol>
+        {% for section in sections %}
+        <li><a href="#{{ section.id }}">{{ section.title }}</a></li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    {% for section in sections %}
+    <section id="{{ section.id }}" aria-labelledby="{{ section.id }}-heading">
+      <h2 id="{{ section.id }}-heading">{{ section.title }}</h2>
+      {{ section.content_html | safe }}
+    </section>
+    {% endfor %}
+
+  </article>
+</body>
+</html>

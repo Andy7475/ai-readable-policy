@@ -1,0 +1,321 @@
+/* ── Reset & base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --border: #dee2e6;
+  --text: #212529;
+  --text-muted: #6c757d;
+  --primary: #0d6efd;
+  --primary-dark: #0a58ca;
+  --accent: #e7f1ff;
+  --danger: #dc3545;
+  --danger-bg: #fff5f5;
+  --radius: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  padding: 1rem;
+}
+
+a { color: var(--primary); }
+a:hover { color: var(--primary-dark); }
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.site-header, main, footer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.site-header {
+  padding: 2rem 0 1rem;
+}
+
+.site-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin-top: .25rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+footer {
+  padding: 1rem 0;
+  color: var(--text-muted);
+  font-size: .875rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+}
+
+.hint {
+  font-size: .875rem;
+  color: var(--text-muted);
+  margin-bottom: .75rem;
+}
+
+/* ── Form controls ─────────────────────────────────────────────────────────── */
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font: inherit;
+  background: var(--surface);
+  color: var(--text);
+}
+
+input[type="password"]:focus,
+textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+textarea { resize: vertical; }
+
+button {
+  padding: .45rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button:hover { background: var(--bg); }
+
+button.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+button.primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+.field-row {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.field-row input { flex: 1; min-width: 0; }
+
+.field-col { display: flex; flex-direction: column; gap: .5rem; }
+
+.query-actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+#key-status {
+  font-size: .875rem;
+  color: var(--text-muted);
+}
+
+/* ── Error & loading ───────────────────────────────────────────────────────── */
+#error-banner {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  font-size: .9rem;
+}
+
+#loading-indicator {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: .5rem;
+}
+
+/* ── Answer ────────────────────────────────────────────────────────────────── */
+.answer-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+#citations-container h3 {
+  font-size: .9rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  margin-bottom: .75rem;
+}
+
+/* ── Citation cards ────────────────────────────────────────────────────────── */
+.citation-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  margin-bottom: .75rem;
+  background: var(--accent);
+}
+
+.citation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  margin-bottom: .4rem;
+}
+
+.policy-name {
+  font-weight: 600;
+  font-size: .9rem;
+}
+
+.section-link {
+  font-size: .85rem;
+}
+
+.relevance-note {
+  font-size: .85rem;
+  color: var(--text-muted);
+  margin-bottom: .5rem;
+}
+
+.verbatim-text {
+  font-size: .9rem;
+  line-height: 1.65;
+  border-left: 3px solid var(--border);
+  padding-left: .75rem;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Policy index list ─────────────────────────────────────────────────────── */
+#policy-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: .75rem;
+}
+
+#policy-list a {
+  font-weight: 500;
+}
+
+/* ── Policy document pages ─────────────────────────────────────────────────── */
+.back-nav {
+  max-width: 800px;
+  margin: 1rem auto .5rem;
+  font-size: .9rem;
+}
+
+article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+}
+
+article h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.policy-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .2rem .75rem;
+  font-size: .875rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  margin-bottom: 2rem;
+  background: var(--surface);
+}
+
+.policy-meta dt { font-weight: 600; }
+
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .75rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.toc h2 {
+  font-size: .9rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  margin-bottom: .5rem;
+}
+
+.toc ol {
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  font-size: .9rem;
+}
+
+article section {
+  margin-top: 2rem;
+  padding-top: .5rem;
+  border-top: 1px solid var(--border);
+}
+
+article h2 {
+  font-size: 1.2rem;
+  margin-bottom: .75rem;
+}
+
+article p { margin-bottom: .75rem; }
+article ul, article ol {
+  padding-left: 1.5rem;
+  margin-bottom: .75rem;
+}
+article li { margin-bottom: .25rem; }
+
+/* Highlight a section when navigated to via fragment */
+article section:target {
+  background: var(--accent);
+  padding: .75rem;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+  margin-left: -.75rem;
+}

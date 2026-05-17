@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Q&amp;A — AI-Readable Policy Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Policy Q&amp;A</h1>
+    <p class="subtitle">Ask a question about company policy. The answer cites the exact policy sections — verbatim, no paraphrasing.</p>
+  </header>
+
+  <main>
+
+    <section class="card" id="api-key-section">
+      <h2>API Key</h2>
+      <p class="hint">
+        Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio ↗</a>.
+        Your key is stored only in your browser (localStorage) and sent directly to Google.
+      </p>
+      <div class="field-row">
+        <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off" spellcheck="false">
+        <button id="save-key-btn">Save</button>
+        <span id="key-status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="card" id="query-section">
+      <h2>Ask a question</h2>
+      <p class="hint" id="index-info">Loading policy index…</p>
+      <div class="field-col">
+        <textarea id="query-input" rows="3"
+          placeholder="e.g. What are the requirements for handling confidential data sent by email?"
+          spellcheck="true"></textarea>
+        <div class="query-actions">
+          <button id="search-btn" class="primary">Ask</button>
+          <span class="hint">Ctrl+Enter to submit</span>
+        </div>
+      </div>
+    </section>
+
+    <div id="error-banner" role="alert" hidden></div>
+    <div id="loading-indicator" aria-live="polite" hidden>Thinking…</div>
+
+    <section id="answer-section" class="card" hidden>
+      <h2>Answer</h2>
+      <p id="answer-text" class="answer-text"></p>
+      <div id="citations-container"></div>
+    </section>
+
+    <section class="card" id="policies-section">
+      <h2>Policies in this index</h2>
+      <ul id="policy-list">
+        <li><a href="policies/information-security.html">Information Security Policy</a></li>
+        <li><a href="policies/data-classification.html">Data Classification Policy</a></li>
+        <li><a href="policies/acceptable-use.html">Acceptable Use Policy</a></li>
+      </ul>
+      <p class="hint">Each policy uses semantic HTML with addressable sections — every link above navigates directly to the source document.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Demo: <a href="https://github.com/Andy7475/ai-readable-policy" target="_blank" rel="noopener noreferrer">github.com/Andy7475/ai-readable-policy ↗</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
