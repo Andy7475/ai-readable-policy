@@ -1,5 +1,6 @@
 /* ── Reset & base ──────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
 
 :root {
   --bg: #f8f9fa;
@@ -460,6 +461,7 @@ article section:target {
   margin-bottom: .75rem;
 }
 .policy-ref-link { font-size: .8rem; display: block; margin-bottom: .4rem; }
+.policy-ref-heading { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin-bottom: .4rem; }
 
 /* AI suggestion row — separator below, before options */
 .suggest-row {

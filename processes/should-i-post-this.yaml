@@ -1,9 +1,10 @@
 id: should-i-post-this
 title: "Should I post this?"
 description: >
+  Shows how dynamic websites can be created from processes-as-code. Relevant policy sections are dynamically inserted alongside the process (not hard-coded in)
   A decision guide for LinkedIn posts involving achievements, life events,
   congratulations to colleagues who overtook you, and signals that you
-  are available for work. Follow each step before hitting publish.
+  are available for work. 
 policy_refs:
   - policies/content-standards.html#li-content--crowbarring-strategic-insights-into-life-events
   - policies/content-standards.html#li-content--passive-aggressive-congratulations-protocol

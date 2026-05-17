@@ -52,10 +52,19 @@ def _extract_sections(policy_id: str, body: str) -> list[dict]:
     return sections
 
 
+def _rewrite_anchors(html: str, policy_id: str) -> str:
+    """Rewrite bare #slug anchors to the full #policy--slug form used in built HTML."""
+    return re.sub(
+        r'href="#([^"]+)"',
+        lambda m: f'href="#{policy_id}--{m.group(1)}"',
+        html,
+    )
+
+
 def _build_section(policy_id: str, heading: str, nodes: list) -> dict:
     section_slug = slugify(heading, separator="-")
     section_id = f"{policy_id}--{section_slug}"
-    content_html = "".join(str(n) for n in nodes)
+    content_html = _rewrite_anchors("".join(str(n) for n in nodes), policy_id)
     plain_text = " ".join(
         BeautifulSoup(content_html, "html.parser").get_text(" ").split()
     )

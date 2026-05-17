@@ -10,7 +10,7 @@ owner: "Personal Branding Division"
 
 This policy governs the responsible inflation of professional achievements on LinkedIn. It exists because "attended a webinar" is not a post and "completed a strategic upskilling initiative in emerging technologies" is not a lie — it is positioning.
 
-This policy applies to all posts describing professional activities, past roles, or anything that happened at work. Read it alongside the [Content Standards Policy](content-standards.html#li-content--the-humble-brag-framework) and [AI Concealment Policy](ai-concealment.html#li-ai--the-authenticity-veneer). For a decision guide before posting an achievement, see the [Should I Post This? process](../processes/should-i-post-this.html).
+This policy applies to all posts describing professional activities, past roles, or anything that happened at work. Read it alongside the [Content Standards Policy](content-standards.html) and [AI Concealment Policy](ai-concealment.html). For a decision guide before posting an achievement, see the [Should I Post This? process](../processes/should-i-post-this.html).
 
 ## Approved Inflation Multipliers
 
@@ -49,7 +49,7 @@ The distinction between leading and attending is one of the most consequential d
 - **"Attended"** — this option does not appear in any approved LinkedIn post.
 - **"Observed"** — this option does not exist professionally.
 
-Misuse of "led" when "received the calendar invite" is accurate falls under the [AI Concealment Policy risk matrix](ai-concealment.html#li-ai--risk-management) as a separate exposure category. The person who actually led the meeting is also on LinkedIn.
+If the person who actually led things is also on LinkedIn, please refer to the [Vagueness Principle](#the-vagueness-principle)
 
 ## Certification and Credential Calibration
 

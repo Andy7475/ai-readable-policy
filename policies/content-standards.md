@@ -10,7 +10,7 @@ owner: "Thought Leadership Compliance"
 
 This policy defines standards for LinkedIn content creation. It is not designed to prevent posting — it is designed to prevent the specific kind of posting that makes your connections pretend not to have seen it.
 
-This policy applies to all LinkedIn users who have ever described themselves as a "connector," considered posting about their morning routine, or typed the words "I'm humbled to announce." It operates alongside the [Achievement Inflation Policy](achievement-inflation.html#li-achieve--the-vagueness-principle) and [AI Concealment Policy](ai-concealment.html#li-ai--plausible-deniability-framework). Use the [Should I Post This? process guide](../processes/should-i-post-this.html) before publishing.
+This policy applies to all LinkedIn users who have ever described themselves as a "connector," considered posting about their morning routine, or typed the words "I'm humbled to announce." It operates alongside the [Achievement Inflation Policy](achievement-inflation.html) and [AI Concealment Policy](ai-concealment.html). Use the [Should I Post This? process guide](../processes/should-i-post-this.html) before publishing.
 
 ## The Humble Brag Framework
 
@@ -33,9 +33,13 @@ The following phrases are suspended from use until further notice:
 - **"Delve"** — AI wrote this.
 
 Posts consisting entirely of three-word sentences.  
+
 Each on its own line.  
+
 For emphasis.  
-Are also suspended.  
+
+Are also suspended. 
+
 For emphasis.
 
 ## Crowbarring Strategic Insights into Life Events

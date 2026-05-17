@@ -10,13 +10,17 @@ owner: "Thought Leadership Compliance"
 
 This policy provides guidance on presenting AI-generated content as authentic human expression. It applies to anyone who has pressed "Rewrite with AI," found the result suspiciously good, and decided that no one needs to know.
 
-This policy should be read alongside the [Achievement Inflation Policy](achievement-inflation.html#li-achieve--the-vagueness-principle) and [Content Standards Policy](content-standards.html#li-content--the-humble-brag-framework). For a step-by-step decision guide, see the [Should I Rewrite This With AI? process](../processes/should-i-rewrite-with-ai.html).
+This policy should be read alongside the [Achievement Inflation Policy](achievement-inflation.html) and [Content Standards Policy](content-standards.html). For a step-by-step decision guide, see the [Should I Rewrite This With AI? process](../processes/should-i-rewrite-with-ai.html).
 
 ## Plausible Deniability Framework
 
 Effective AI concealment relies on plausible deniability: the ability to claim, under mild scrutiny, that you "might have used a tool for light editing."
 
-The framework operates on three levels. **Cover** — the AI output is sufficiently different from your usual writing that colleagues will assume you had a good week. **Blend** — you have inserted one grammatical error and a personal anecdote the AI could not have invented. **Exposure** — your post contains the word "delve" and your colleagues have read this policy.
+The framework operates on three levels. 
+
+- **Cover** — the AI output is sufficiently different from your usual writing that colleagues will assume you had a good week. 
+- **Blend** — you have inserted one grammatical error and a personal anecdote the AI could not have invented. 
+- **Exposure** — your post contains the word "delve" or "quietly" and your colleagues have read this policy.
 
 ## Approved Concealment Techniques
 

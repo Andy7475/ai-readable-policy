@@ -35,7 +35,7 @@
       <div id="guided-situation" class="situation-box">
         <label for="situation-input"><strong>Describe your situation</strong> (optional — used to get an AI suggestion at each step)</label>
         <textarea id="situation-input" rows="2"
-          placeholder="e.g. I'm sending last quarter's financial forecasts to our external auditor…"></textarea>
+          placeholder="e.g. After tripping up on the stairs, I realised gaining a true competitive advantage can also trip you up …"></textarea>
       </div>
 
       <div id="guided-api-key" class="api-key-inline">
@@ -128,27 +128,6 @@
       qText.textContent = node.question;
       qEl.appendChild(qText);
 
-      // Policy reference snippet
-      if (node.policy_ref) {
-        const snippet = getPolicySnippet(node.policy_ref);
-        if (snippet) {
-          const ref = document.createElement('div');
-          ref.className = 'step-policy-ref';
-          const refLink = document.createElement('a');
-          refLink.href = SITE_ROOT + node.policy_ref;
-          refLink.target = '_blank';
-          refLink.rel = 'noopener noreferrer';
-          refLink.textContent = snippet.policy_title + ' › ' + snippet.section_title + ' ↗';
-          refLink.className = 'policy-ref-link';
-          const refText = document.createElement('blockquote');
-          refText.className = 'verbatim-text';
-          refText.innerHTML = snippet.content_html;
-          ref.appendChild(refLink);
-          ref.appendChild(refText);
-          qEl.appendChild(ref);
-        }
-      }
-
       // AI suggestion
       const suggestRow = document.createElement('div');
       suggestRow.className = 'suggest-row';
@@ -191,6 +170,32 @@
         optionsEl.appendChild(btn);
       }
       qEl.appendChild(optionsEl);
+
+      // Policy reference snippet
+      if (node.policy_ref) {
+        const snippet = getPolicySnippet(node.policy_ref);
+        if (snippet) {
+          const refHeading = document.createElement('h4');
+          refHeading.className = 'policy-ref-heading';
+          refHeading.textContent = 'Relevant policy extracts';
+          qEl.appendChild(refHeading);
+
+          const ref = document.createElement('div');
+          ref.className = 'step-policy-ref';
+          const refLink = document.createElement('a');
+          refLink.href = SITE_ROOT + node.policy_ref;
+          refLink.target = '_blank';
+          refLink.rel = 'noopener noreferrer';
+          refLink.textContent = snippet.policy_title + ' › ' + snippet.section_title + ' ↗';
+          refLink.className = 'policy-ref-link';
+          const refText = document.createElement('blockquote');
+          refText.className = 'verbatim-text';
+          refText.innerHTML = snippet.content_html;
+          ref.appendChild(refLink);
+          ref.appendChild(refText);
+          qEl.appendChild(ref);
+        }
+      }
 
       stepEl.appendChild(qEl);
     }

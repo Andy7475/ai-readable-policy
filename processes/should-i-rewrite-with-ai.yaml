@@ -1,6 +1,7 @@
 id: should-i-rewrite-with-ai
 title: "Should I rewrite this with AI?"
 description: >
+  Shows how dynamic websites can be created from processes-as-code. . Relevant policy sections are dynamically inserted alongside the process (not hard-coded in)
   A decision guide for anyone hovering over the 'Rewrite with AI' button.
   Follow the steps before pressing it. It will not take long.
 policy_refs:
